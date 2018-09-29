@@ -13,17 +13,11 @@ class Train
     @wagons = []
     @type = :unknown
     @@trains_with_numbers[number] = self
-    self.register_instance
+    register_instance
   end
 
-  class << self
-    def find(number)
-      if @@trains_with_numbers.has_key?(number)
-        @@trains_with_numbers[number]
-      else
-        nil
-      end
-    end
+  def self.find(number)
+    @@trains_with_numbers[number]
   end
 
   attr_reader :speed, :number, :type, :wagons, :current_station, :route

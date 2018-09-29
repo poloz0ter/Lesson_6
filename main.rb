@@ -11,7 +11,8 @@ class Interface
   def initialize
     @stations = []
     @trains = []
-    @routs = []
+    @wagons = []
+    @routes = []
   end
 
   def create_station
@@ -47,7 +48,7 @@ class Interface
     to = gets.to_i - 1
     return puts "Одна станция не может быть начальной и конечной!" if from == to
     route = Route.new(@stations[from], @stations[to])
-    @routs << route
+    @routes << route
     puts "Маршрут #{@stations[from].name} - #{@stations[to].name} построен!"
   end
 
@@ -56,33 +57,33 @@ class Interface
     @stations.each_with_index { |station, index| puts "#{index + 1}.#{station.name}" }
     @station_choice = gets.to_i - 1
     puts "Выберите маршрут: "
-    @routs.each_with_index { |route, index| puts "#{index + 1}.#{route.from.name} - #{route.to.name}" }
+    @routes.each_with_index { |route, index| puts "#{index + 1}.#{route.from.name} - #{route.to.name}" }
     @route_choice = gets.to_i - 1
   end
 
   def add_station_to_route
     edit_route
-    return puts "Станция уже в маршруте!" if @routs[@route_choice].stations.include? @stations[@station_choice]
-    @routs[@route_choice].add_station(@stations[@station_choice])
+    return puts "Станция уже в маршруте!" if @routes[@route_choice].stations.include? @stations[@station_choice]
+    @routes[@route_choice].add_station(@stations[@station_choice])
     puts "Станция #{@stations[@station_choice].name} добавлена в маршрут!"
   end
 
   def delete_station_from_route
     edit_route
-    return puts "Этой станции нет в маршруте!" unless @routs[@route_choice].stations.include? @stations[@station_choice]
+    return puts "Этой станции нет в маршруте!" unless @routes[@route_choice].stations.include? @stations[@station_choice]
     return puts "Нельзя удалить первую и последнюю станции" if @stations[@station_choice] == @stations.first || @stations[@station_choice] == @stations.last
-    @routs[@route_choice].delete_station(@stations[@station_choice])
+    @routes[@route_choice].delete_station(@stations[@station_choice])
     puts "Станция #{@stations[@station_choice].name} удалена из маршрута!"
   end
 
   def add_route_to_train
-    @routs.each_with_index { |route, index| puts "#{index + 1}.#{route.from.name} - #{route.to.name}" }
+    @routes.each_with_index { |route, index| puts "#{index + 1}.#{route.from.name} - #{route.to.name}" }
     puts "Выберите маршрут:"
     @route_choice = gets.to_i - 1
     @trains.each_with_index { |train, index| puts "#{index + 1}.#{train.number}" }
     puts "Выберите поезд:"
     train_choice = gets.to_i - 1
-    @trains[train_choice].route = @routs[@route_choice]
+    @trains[train_choice].route = @routes[@route_choice]
     puts "Поезд №#{@trains[train_choice].number} выставлен на маршрут!"
   end
 
