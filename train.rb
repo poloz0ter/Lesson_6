@@ -11,6 +11,7 @@ class Train
     @number = number
     @speed = 0
     @wagons = []
+    @deleted_wagons = []
     @type = :unknown
     @@trains_with_numbers[number] = self
     register_instance
@@ -39,7 +40,10 @@ class Train
   end
 
   def delete_wagon
-    @wagons.pop if speed.zero?
+    if speed.zero?
+    @deleted_wagons << @wagons.last
+    @wagons.pop
+    end
   end
 
   def route=(route)
